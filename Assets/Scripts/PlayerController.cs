@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class PlayerController : MonoBehaviour {
     //private float moveInput;
     private bool isGrounded;
     private int extraJumps;
+    private bool facingRight = true;
 
     private Rigidbody2D playerRigidBody;
     private SpriteRenderer playerSpriteRenderer;
@@ -54,16 +56,37 @@ public class PlayerController : MonoBehaviour {
             isGrounded = false;
         }
 
+        Vector3 mousePosition = Input.mousePosition;
+        Vector3 playerScreenPoint = Camera.main.WorldToScreenPoint(transform.position);
+        
 
-        if(Input.GetKey("d") || Input.GetKey("right"))
+        if (Input.GetKey("d") || Input.GetKey("right"))
         {
-            playerRigidBody.velocity = new Vector2(movementSpeed, playerRigidBody.velocity.y);
-            playerSpriteRenderer.flipX = false;
+            if (mousePosition.x < playerScreenPoint.x )
+            {
+                playerRigidBody.velocity = new Vector2(movementSpeed, playerRigidBody.velocity.y);
+                //playerSpriteRenderer.flipX = false;   //Only works for the graphics, not the rigidbody or children
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            }
+            else
+            {
+                playerRigidBody.velocity = new Vector2(movementSpeed, playerRigidBody.velocity.y);
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            }
         }
         else if (Input.GetKey("a") || Input.GetKey("left"))
         {
-            playerRigidBody.velocity = new Vector2(-(movementSpeed), playerRigidBody.velocity.y);
-            playerSpriteRenderer.flipX = true;
+            if (mousePosition.x > playerScreenPoint.x )
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                playerRigidBody.velocity = new Vector2(-(movementSpeed), playerRigidBody.velocity.y);
+            }
+            else
+            {
+                playerRigidBody.velocity = new Vector2(-(movementSpeed), playerRigidBody.velocity.y);
+                //playerSpriteRenderer.flipX = true;    //Only works for the graphics, not the rigidbody or children
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            }
         }
         else
         {

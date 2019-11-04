@@ -8,6 +8,12 @@ public class WeaponController : MonoBehaviour
 
     public Transform firePoint;
     public GameObject fireballPrefab;
+    public GameObject weaponAttachPoint;
+
+    void Start()
+    {
+        //transform.parent = weaponAttachPoint.transform;
+    }
 
     void Update()
     {
